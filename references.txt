@@ -1,0 +1,15 @@
+https://learner-cares.medium.com/handwritten-digit-recognition-using-convolutional-neural-network-cnn-with-tensorflow-2f444e6c4c31#7c6f
+
+Reference of digit-recognition CNN model
+
+>>>>>>> 
+
+https://stackoverflow.com/questions/20618804/how-to-smooth-a-curve-for-a-dataset
+
+Reference for smoothing out a graph (Savitzky-Golay filter)
+
+https://scipy.github.io/old-wiki/pages/Cookbook/SavitzkyGolay
+
+Cookbook (source integrated in SciPy library)
+
+>>>>>>>

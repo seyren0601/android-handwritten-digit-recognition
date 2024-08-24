@@ -1,0 +1,4 @@
+https://pinetools.com/merge-images | Image merge (to generate test images from mnist digit images)
+https://pixspy.com/ | To examine test images from close-up and by pixels
+https://www.pixilart.com/draw/96x64-bitmap-7012c32cc9# | To draw test images by hand
+https://cloudconvert.com/png-to-bmp | To resize bmp images
