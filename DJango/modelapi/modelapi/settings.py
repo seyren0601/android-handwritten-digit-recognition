@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-owjt@l6e3bdyr(6r0%mnh2-oqtp*!m2(dby*b^j^f%q&-z2u-b
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["10.0.2.2"]
 
 
 # Application definition
@@ -121,3 +121,28 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+import os
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'filters': ['require_debug_true'],
+        },
+    },
+    'loggers': {
+        'mylogger': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            'propagate': True,
+        },
+    },
+}

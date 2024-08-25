@@ -1,11 +1,14 @@
 package com.example.digitpredictor
 
 import android.content.res.AssetManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,14 +19,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.digitpredictor.ui.theme.DigitPredictorTheme
-import org.jetbrains.kotlinx.multik.api.io.read
-import org.jetbrains.kotlinx.multik.api.io.readNPY
-import org.jetbrains.kotlinx.multik.api.mk
-import org.jetbrains.kotlinx.multik.ndarray.data.D1
-import org.jetbrains.kotlinx.multik.ndarray.data.D2
-import org.jetbrains.kotlinx.multik.ndarray.data.D2Array
-import org.jetbrains.kotlinx.multik.ndarray.data.Dimension
-import org.jetbrains.kotlinx.multik.ndarray.data.NDArray
+import okhttp3.FormBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import org.json.JSONArray
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Body
+import retrofit2.http.POST
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.net.URI
 import kotlin.io.path.Path
@@ -38,18 +46,44 @@ class MainActivity : ComponentActivity() {
         val canvasView = findViewById<DigitCanvas>(R.id.canvas_digit)
 
         btnGuess.setOnClickListener {
-            val file = File("file://android_asset/nn_weights_0_1.npy")
+            var bitMap = canvasView.defaultBitmap
+            bitMap = Bitmap.createScaledBitmap(bitMap, 28, 28, false)
+            val array = IntArray(28 * 28)
 
-            println(file.exists())
-            //val weights_0_1:NDArray<Float, D2> = mk.read("nn_weights_0_1.npy")
+            bitMap.getPixels(array, 0, bitMap.width, 0, 0, bitMap.width, bitMap.height)
 
-            //println(weights_0_1.dim)
+            val jsonArray = JSONArray(array)
+
+            val retrofit = Retrofit.Builder()
+                .baseUrl("http://10.0.2.2:8000")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+            val apiService = retrofit.create(ApiService::class.java)
+
+            apiService.postRequest(array).enqueue(object : Callback<Int> {
+                override fun onResponse(call: Call<Int>, response: Response<Int>) {
+                    var prediction = response.body().toString()
+
+                    println(response)
+
+                    var txtResult = findViewById<TextView>(R.id.txtGuess)
+                    txtResult.text = prediction
+                }
+
+                override fun onFailure(call: Call<Int>, t: Throwable) {
+                    println(t.message)
+                }
+            })
         }
 
         btnClear.setOnClickListener {
             canvasView.clearCanvas()
         }
     }
+}
 
-
+interface ApiService{
+    @POST("/guess")
+    fun postRequest(@Body body:IntArray): Call<Int>
 }

@@ -26,7 +26,7 @@ class DigitCanvas (context: Context, attrs:AttributeSet? = null): View(context, 
         mPaint = Paint()
         background = Color.WHITE
         mPaint.setColor(Color.BLACK)
-        mPaint.strokeWidth = 30F
+        mPaint.strokeWidth = 50F
         mPaint.style = Paint.Style.STROKE
     }
 
@@ -40,11 +40,13 @@ class DigitCanvas (context: Context, attrs:AttributeSet? = null): View(context, 
         defaultCanvas = Canvas(defaultBitmap)
         defaultCanvas.drawColor(background)
 
+        /*
         // Draw border of canvas
         mPaint.color = Color.BLACK
         mPaint.style = Paint.Style.STROKE
         // need to pad by 30 pixel, or the bottom and right border will exceed the canvas
         defaultCanvas.drawRect(x, y, x + width - (2 * mPaint.strokeWidth), y + height - (2 * mPaint.strokeWidth), mPaint)
+        */
     }
 
     override fun onDraw(canvas: Canvas){
@@ -104,12 +106,6 @@ class DigitCanvas (context: Context, attrs:AttributeSet? = null): View(context, 
         defaultBitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888)
         defaultCanvas = Canvas(defaultBitmap)
         defaultCanvas.drawColor(background)
-
-        // Draw border of canvas
-        mPaint.color = Color.BLACK
-        mPaint.style = Paint.Style.STROKE
-        // need to pad by 30 pixel, or the bottom and right border will exceed the canvas
-        defaultCanvas.drawRect(x, y, x + width - (2 * mPaint.strokeWidth), y + height - (2 * mPaint.strokeWidth), mPaint)
 
         invalidate()
     }
