@@ -1,28 +1,11 @@
 package com.example.digitpredictor
 
-import android.content.res.AssetManager
+import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.digitpredictor.ui.theme.DigitPredictorTheme
-import okhttp3.FormBody
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
 import org.json.JSONArray
 import retrofit2.Call
 import retrofit2.Callback
@@ -31,10 +14,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.POST
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.net.URI
-import kotlin.io.path.Path
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,6 +34,7 @@ class MainActivity : ComponentActivity() {
             val jsonArray = JSONArray(array)
 
             val retrofit = Retrofit.Builder()
+                // pc
                 .baseUrl("http://10.0.2.2:8000")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
@@ -79,6 +59,12 @@ class MainActivity : ComponentActivity() {
 
         btnClear.setOnClickListener {
             canvasView.clearCanvas()
+        }
+
+        val btnToChatBot = findViewById<Button>(R.id.btn_toChatbot)
+        btnToChatBot.setOnClickListener {
+            val intent = Intent(this, ChatbotActivity::class.java)
+            startActivity(intent)
         }
     }
 }

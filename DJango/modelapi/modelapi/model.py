@@ -13,16 +13,17 @@ def predict(int_array):
     np_array = np.bitwise_not(np_array)
     image = Image.fromarray(np_array).convert("L")
 
-    w_0_1 = np.load("D:\OneDrive - nhg.vn\Self-study\Deep Learning\Project\Digit Recognition\DJango\modelapi\modelapi\\nn_weights_0_1.npy")
-    w_1_2 = np.load("D:\OneDrive - nhg.vn\Self-study\Deep Learning\Project\Digit Recognition\DJango\modelapi\modelapi\\nn_weights_1_2.npy")
+    # PC
+    #w_0_1 = np.load("D:\OneDrive - nhg.vn\Self-study\Deep Learning\Project\Digit Recognition\DJango\modelapi\modelapi\\nn_weights_0_1.npy")
+    #w_1_2 = np.load("D:\OneDrive - nhg.vn\Self-study\Deep Learning\Project\Digit Recognition\DJango\modelapi\modelapi\\nn_weights_1_2.npy")
+    # Laptop
+    w_0_1 = np.load("E:\OneDrive - nhg.vn\Self-study\Deep Learning\Project\Digit Recognition\DJango\modelapi\modelapi\\nn_weights_0_1.npy")
+    w_1_2 = np.load("E:\OneDrive - nhg.vn\Self-study\Deep Learning\Project\Digit Recognition\DJango\modelapi\modelapi\\nn_weights_1_2.npy")
 
     layer_0 = np.asarray(image, dtype="float64").reshape(1, 28 * 28) / 255
-    logger.info(layer_0)
     
     layer_1 = relu(layer_0.dot(w_0_1))
     layer_2 = layer_1.dot(w_1_2)
-
-    logger.info("Predict: " + str(np.argmax(layer_2)))
     
     return np.argmax(layer_2)
 

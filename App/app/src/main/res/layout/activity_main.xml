@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/canvas_digit"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="100dp"
         android:text="Hello World!"
         android:textSize="36sp"/>
 
@@ -40,4 +40,14 @@
         android:layout_height="380dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_toChatbot"
+        android:textSize="30sp"
+        android:text="TO CHATBOT"
+        android:layout_below="@id/txtGuess"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"/>
 </RelativeLayout>
