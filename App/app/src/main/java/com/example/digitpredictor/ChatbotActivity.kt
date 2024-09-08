@@ -1,26 +1,24 @@
 package com.example.digitpredictor
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ScrollView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.ComponentActivity
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.*
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import okhttp3.OkHttp
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
-import okhttp3.internal.http.HttpMethod
 import okio.ByteString
-import java.net.URI
 
 class ChatbotActivity:ComponentActivity() {
     private lateinit var client: OkHttpClient
@@ -30,7 +28,7 @@ class ChatbotActivity:ComponentActivity() {
 
         setContentView(R.layout.activity_chatbot)
 
-        val scrollView = findViewById<ScrollView>(R.id.chatbox)
+        val chatbox = findViewById<LinearLayout>(R.id.chatbox)
         val lastTextView = null
         val btnSubmit = findViewById<Button>(R.id.btn_submit)
 
@@ -38,19 +36,45 @@ class ChatbotActivity:ComponentActivity() {
 
         val request = Request.Builder().url("http://10.0.2.2:8000/chatbot").build()
 
-        val listener = com.example.digitpredictor.WebSocketListener()
-        webSocket = client.newWebSocket(request, listener)
+
+
 
         btnSubmit.setOnClickListener {
             val viewTextInput = findViewById<EditText>(R.id.txt_input)
             val message = viewTextInput.text.toString()
-            webSocket.send(message)
-            client.dispatcher.executorService.shutdown()
+            if(!message.equals("")){
+                var textView = TextView(this).apply{
+                    layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
+                        bottomMargin = 20 // marginBottom
+                    }
+                    textSize=25F
+                    text = "USER\n" + message
+                    textAlignment = TextView.TEXT_ALIGNMENT_VIEW_END
+                }
+
+                chatbox.addView(textView)
+
+                var chatbotView = TextView(this).apply{
+                    layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
+                        bottomMargin = 20 // marginBottom
+                    }
+                    textSize = 25F
+                    text = "CHATBOT\n"
+                }
+                chatbox.addView(chatbotView)
+
+                val listener = com.example.digitpredictor.WebSocketListener(this, chatbox, chatbotView)
+                webSocket = client.newWebSocket(request, listener)
+
+                webSocket.send(message)
+            }
+            viewTextInput.setText("")
+            webSocket.close(1000, "done")
         }
     }
 }
 
-class WebSocketListener():WebSocketListener(){
+class WebSocketListener(val context:Activity, val chatbox:LinearLayout, val chatbotView:TextView):WebSocketListener(){
     private var count = 0
     override fun onOpen(webSocket: WebSocket, response: Response) {
         Log.d("WebSocket", "Connected to server")
@@ -60,6 +84,10 @@ class WebSocketListener():WebSocketListener(){
     override fun onMessage(webSocket: WebSocket, text: String) {
         Log.d("WebSocket", "Message received: $text")
         // Handle the message received from server
+        context.runOnUiThread(Runnable {
+            chatbotView?.text = chatbotView?.text.toString() + text
+        })
+
     }
 
     override fun onMessage(webSocket: WebSocket, bytes: ByteString) {

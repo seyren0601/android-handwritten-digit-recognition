@@ -6,40 +6,27 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="500sp"
-        android:id="@+id/chatbox">
+        android:id="@+id/chatbot_layout">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_gravity="bottom">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/chatbot0"
-                android:textSize="25sp"
-                android:text="CHATBOT\nHello, how can I help you?"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="25sp"
-                android:text="USER\nsomething something"
-                android:layout_below="@id/chatbot0"
-                android:textAlignment="viewEnd"
-                android:layout_marginBottom="20sp"/>
+            android:layout_gravity="bottom"
+            android:id="@+id/chatbox">
         </LinearLayout>
     </ScrollView>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/chatbox"
         android:layout_marginStart="100sp"
+        android:layout_below="@id/chatbot_layout"
         android:id="@+id/txt_input"
         android:textSize="30sp"
         android:hint="ask something"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/chatbox"
+        android:layout_below="@id/chatbot_layout"
         android:id="@+id/btn_submit"
         android:textSize="17sp"
         android:text="ASK"/>
